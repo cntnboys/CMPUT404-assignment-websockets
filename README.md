@@ -57,3 +57,11 @@ Contributors
 
 * Mark Galloway
 * Abram Hindle
+* Cameron Alexander
+
+
+
+Resources
+---------
+* https://github.com/cntnboys/CMPUT404-assignment-ajax
+* https://github.com/abramhindle/WebSocketsExamples/blob/master/chat.py 
