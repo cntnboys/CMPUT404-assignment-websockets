@@ -140,7 +140,7 @@ def flask_post_json():
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     '''update the entities via this interface'''
-
+    data = flask_post_json(request)
     if request.method == "POST":
         myWorld.set(entity, data)
 
@@ -148,13 +148,14 @@ def update(entity):
         for k, v in data.items():
             myWorld.update(entity, k, v)
 
-    res = Reponse(json.dumps(data), status= 200)
+    res = Response(json.dumps(data), status= 200)
     return res
 
 @app.route("/world", methods=['POST','GET'])    
 def world():
     '''you should probably return the world here'''
-    return None
+    res = Response(json.dumps(myWorld.world()), status = 200)
+    return res
 
 @app.route("/entity/<entity>")    
 def get_entity(entity):
