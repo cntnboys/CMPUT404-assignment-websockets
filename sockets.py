@@ -148,8 +148,7 @@ def update(entity):
         for k, v in data.items():
             myWorld.update(entity, k, v)
 
-    res = Response(json.dumps(data), status= 200)
-    return res
+    return flask.jsonify(myWorld.get(entity))
 
 @app.route("/world", methods=['POST','GET'])    
 def world():
