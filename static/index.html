@@ -51,10 +51,12 @@ function drawCircle(context,entity) {
         lineWidth = 3;
         var x = entity["x"];
         var y = entity["y"];
+        var r = Math.floor(Math.random()*256)
         //moveTo(x,y);
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
-        arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
+        arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);
+        arc(x, y, r, 0, 2.0 * Math.PI, false);
         stroke();                                
     }
 }
@@ -125,6 +127,9 @@ function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //XXX: Send a XHTML Request that updates the entity you just modified!
+    var ent = {}
+    ent[entity] = data
+    socket.send(JSON.stringify(ent))
 }
 var counter = 0;
 function addEntityWithoutName(data) {
@@ -273,7 +278,12 @@ function wsSetup() {
     socket.onmessage = function(msg) {  
         try {
             debug("WebSocket Recv:" + msg.data);
-            //XXX: TODO What are you going to do here?            
+            //XXX: TODO What are you going to do here?
+            var message = JSON.parse(msg.data);
+            for (ent in message){
+                world[ent] = message[ent];
+                drawNextFrame();
+            }
         } catch (e) {
             alert("socket on message: " + e);
         }
