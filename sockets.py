@@ -97,10 +97,17 @@ def read_ws(ws,client):
     try:
         while True:
             msg = ws.receive()
-            print "WS RECV: %s" % msg
+            #print "WS RECV: %s" % msg
             if (msg is not None):
+                #packet = json.loads(msg)
+                #send_all_json( packet )
                 packet = json.loads(msg)
-                send_all_json( packet )
+                for name, data in packet.iteritems():
+                    entity = myWorld.get(name)
+                    for k, v in data.iteritems():
+                        entity[k] = v
+                        myWorld.set(name,entity)
+                send_all_json(myWorld.world())
             else:
                 break
     except:
@@ -114,6 +121,7 @@ def subscribe_socket(ws):
 
     client = Client()
     clients.append(client)
+    client.put(json.dumps(myWorld.world()))
     g = gevent.spawn( read_ws, ws, client )    
     try:
         while True:
